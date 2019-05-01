@@ -9,10 +9,12 @@ class ClienteViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Cliente.objects.all()
-        vendedor_id = self.request.query_params.get('vendedor', None)
-        if vendedor_id.isnumeric():
-            queryset = queryset.filter(vendedor=vendedor_id)
+        if self.request.query_params.get('vendedor'):
+            vendedor_id = self.request.query_params.get('vendedor', None)
+            if vendedor_id.isnumeric():
+                queryset = queryset.filter(vendedor=vendedor_id)
         return queryset
+
 
 class VendedorViewSet(viewsets.ModelViewSet):
     queryset = Vendedor.objects.all()
