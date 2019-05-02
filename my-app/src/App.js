@@ -18,6 +18,10 @@ import Clientes from './Clientes';
 import Vendedores from './Vendedores';
 import styles from './styles';
 import SearchBar from './components/SearchBar';
+import SearchClienteId from './components/SearchClienteId';
+import SearchClienteByVendedorId from './components/SearchClienteByVendedorId';
+
+
 
 class Dashboard extends React.Component {
 
@@ -50,11 +54,12 @@ class Dashboard extends React.Component {
           </Typography>
           <div className={classes.tableContainer}>
             <Clientes />
-          </div>
+            <SearchClienteId />
+            <SearchClienteByVendedorId/>
+
           <Typography variant="h4" gutterBottom component="h2">
             Vendedores
           </Typography>
-          <div className={classes.tableContainer}>
             <Vendedores />
             <SearchBar />
           </div>

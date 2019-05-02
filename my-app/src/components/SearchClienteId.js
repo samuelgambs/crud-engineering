@@ -36,7 +36,7 @@ class SearchAppBar extends React.Component {
     this.setState({value: event.target.value});
     let id = event.target.value;
     axios
-      .get(`http://localhost:8000/api/vendedores/${id}/`)
+      .get(`http://localhost:8000/api/clientes/${id}/`)
       .then(res => this.setState({ lista: res.data }))
       .catch(err => console.log(err));
   }
@@ -53,7 +53,7 @@ class SearchAppBar extends React.Component {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-            Busca por ID Vendedor
+            Busca por ID Cliente
           </Typography>
           <div className={classes.grow} />
           <div className={classes.search}>
@@ -78,6 +78,9 @@ class SearchAppBar extends React.Component {
             <TableCell>id</TableCell>
             <TableCell>Nome</TableCell>
             <TableCell align="right" >Cpf</TableCell>
+            <TableCell align="right" >Sexo</TableCell>
+            <TableCell align="right" >Vendedor</TableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>
@@ -90,6 +93,12 @@ class SearchAppBar extends React.Component {
               {this.state.lista.nome}
               </TableCell>
               <TableCell align="right">{this.state.lista.cpf}</TableCell>
+              <TableCell component="th" scope="row">
+              {this.state.lista.sexo}
+              </TableCell>
+              <TableCell component="th" scope="row">
+              {this.state.lista.vendedor}
+              </TableCell>
 
             </TableRow>
         </TableBody>

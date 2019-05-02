@@ -19,7 +19,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import ClientesDialog from "./components/Dialog";
 import Fab from '@material-ui/core/Fab';
 import PersonAdd from '@material-ui/icons/PersonAdd';
 
@@ -56,16 +55,24 @@ export default class SimpleTable extends React.Component {
     };
 
     return (
-        <select className="form-control" value={currentValue} onChange={onChange}>
-            <option value="">
-                Select one...
-            </option>
-            {templates.map(msgTemplate => (
-                <option key={msgTemplate.id} value={msgTemplate.text}>
-                    {msgTemplate.text}
+
+      <TextField
+      select
+      SelectProps={{ native: true }}
+      title="Vendedor"
+      label="Vendedor"
+      name="vendedor"
+      id="vendedor"
+      onChange={this.handleChange}
+      value={currentValue}
+
+    >
+      {templates.map(msgTemplate => (
+                <option key={msgTemplate.id} value={msgTemplate.nome}>
+                    {msgTemplate.nome}
                 </option>
             ))}
-        </select>
+    </TextField>
     )
 }
 
@@ -131,6 +138,10 @@ if (e.target.type === "checkbox") {
 const activeItem = { ...this.state.activeItem, [name]: value };
 this.setState({ activeItem });
 };
+onDropdownSelected(e) {
+  console.log("THE VAL", e.target.value);
+  //here you will see the current selected value of the select input
+}
 
 
 
@@ -155,6 +166,7 @@ this.setState({ activeItem });
       <Table >
         <TableHead>
           <TableRow>
+          <TableCell>Id</TableCell>
             <TableCell>Nome</TableCell>
             <TableCell align="right">Cpf</TableCell>
             <TableCell align="right">Sexo</TableCell>
@@ -165,6 +177,9 @@ this.setState({ activeItem });
         <TableBody>
           {this.state.clientes.map((item) => (
             <TableRow key={item.id}>
+            <TableCell component="th" scope="row">
+                {item.id}
+              </TableCell>
               <TableCell component="th" scope="row">
                 {item.nome}
               </TableCell>
@@ -217,7 +232,7 @@ this.setState({ activeItem });
                         SelectProps={{ native: true }}
                         title="Gênero"
                         label="Gênero"
-                        name="gender"
+                        name="sexo"
                         onChange={this.handleChange}
                         value={this.state.activeItem.sexo}
 
@@ -226,11 +241,11 @@ this.setState({ activeItem });
                         <option value="f">Feminino</option>
                         <option value="m">Masculino</option>
                       </TextField>
-              <Select
-                value={this.state.activeItem.vendedor}
-                onChange={this.handleChange}
 
-              ></Select>
+                      <p>
+          {this.renderTemplates(this.state.vendedores, this.state.activeItem.vendedor)}
+      </p>
+
 
 
           </DialogContent>

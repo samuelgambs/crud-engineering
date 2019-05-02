@@ -36,9 +36,41 @@ class SearchAppBar extends React.Component {
     this.setState({value: event.target.value});
     let id = event.target.value;
     axios
-      .get(`http://localhost:8000/api/vendedores/${id}/`)
+      .get(`http://localhost:8000/api/clientes/?vendedor=${id}`)
       .then(res => this.setState({ lista: res.data }))
       .catch(err => console.log(err));
+  }
+  renderTable(lista) {
+
+    return (
+      <Table >
+        <TableHead>
+          <TableRow>
+          <TableCell>Id</TableCell>
+            <TableCell>Nome</TableCell>
+            <TableCell align="right">Cpf</TableCell>
+            <TableCell align="right">Sexo</TableCell>
+            <TableCell align="right">Vendedor</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {lista.map((item) => (
+            <TableRow key={item.id}>
+            <TableCell component="th" scope="row">
+                {item.id}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                {item.nome}
+              </TableCell>
+              <TableCell align="right">{item.cpf}</TableCell>
+              <TableCell align="right">{item.sexo === 'm' ? 'Masculino' : 'Feminino'  }</TableCell>
+              <TableCell align="right">{item.vendedor}</TableCell>
+
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    )
   }
 
 
@@ -53,7 +85,7 @@ class SearchAppBar extends React.Component {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-            Busca por ID Vendedor
+            Busca Cliente pelo Id do Vendedor
           </Typography>
           <div className={classes.grow} />
           <div className={classes.search}>
@@ -72,28 +104,7 @@ class SearchAppBar extends React.Component {
         </Toolbar>
       </AppBar>
       <Paper >
-      <Table >
-        <TableHead>
-          <TableRow>
-            <TableCell>id</TableCell>
-            <TableCell>Nome</TableCell>
-            <TableCell align="right" >Cpf</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-            <TableRow >
-              <TableCell component="th" scope="row">
-              {this.state.lista.id}
-              </TableCell>
-
-              <TableCell component="th" scope="row">
-              {this.state.lista.nome}
-              </TableCell>
-              <TableCell align="right">{this.state.lista.cpf}</TableCell>
-
-            </TableRow>
-        </TableBody>
-      </Table>
+     {this.renderTable(this.state.lista)}
     </Paper>
     </div>
   );
