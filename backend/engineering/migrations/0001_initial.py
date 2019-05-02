@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             name='Vendedor',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cliente', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='crud.Cliente')),
+                ('cliente', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='engineering.Cliente')),
             ],
         ),
     ]

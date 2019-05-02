@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from crud.serializers import ClienteSerializer, VendedorSerializer
-from crud.models import Cliente, Vendedor
-
+from engineering.serializers import ClienteSerializer, VendedorSerializer
+from engineering.models import Cliente, Vendedor
 
 class ClienteViewSet(viewsets.ModelViewSet):
     serializer_class = ClienteSerializer

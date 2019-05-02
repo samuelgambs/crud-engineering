@@ -1,5 +1,5 @@
 from rest_framework import routers
-from crud.views import ClienteViewSet, VendedorViewSet
+from engineering.views import ClienteViewSet, VendedorViewSet
 
 
 router = routers.SimpleRouter()

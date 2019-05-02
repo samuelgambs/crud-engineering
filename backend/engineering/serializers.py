@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from crud.models import Vendedor, Cliente
+from engineering.models import Vendedor, Cliente
 
 
 class VendedorSerializer(serializers.ModelSerializer):

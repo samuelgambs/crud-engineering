@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crud', '0001_initial'),
+        ('engineering', '0001_initial'),
     ]
 
     operations = [
@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='cliente',
             name='vendedor',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='crud.Vendedor'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='engineering.Vendedor'),
             preserve_default=False,
         ),
         migrations.AddField(
