@@ -17,7 +17,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
-
+import FormErrors from './components/FormErrors'
 
 export default class VendedoresTable extends React.Component {
   constructor(props){
@@ -29,6 +29,8 @@ export default class VendedoresTable extends React.Component {
             nome: "",
             cpf: "",
           },
+        formErrors: {nome: '',cpf:''},
+        formValid:false
     }
   }
 
@@ -60,16 +62,16 @@ export default class VendedoresTable extends React.Component {
   };
 
   saveItem = item  => {
-  this.setState({ open: false });
-  if (item.id) {
-    axios
-    .put(`http://localhost:8000/api/vendedores/${item.id}/`, item)
-      .then(res => this.refreshList());
-    return;
-    }
-    axios
-      .post("http://localhost:8000/api/vendedores/", item)
-      .then(res => this.refreshList());
+    this.setState({ open: false });
+    if (item.id) {
+      axios
+      .put(`http://localhost:8000/api/vendedores/${item.id}/`, item)
+        .then(res => this.refreshList());
+      return;
+      }
+      axios
+        .post("http://localhost:8000/api/vendedores/", item)
+        .then(res => this.refreshList());
   };
   deleteItem = item => {
     try {
@@ -83,9 +85,37 @@ export default class VendedoresTable extends React.Component {
 
   handleChange = e => {
     let { name, value } = e.target;
-    const activeItem = { ...this.state.activeItem, [name]: value };
-    this.setState({ activeItem });
+    const activeItem = { ...this.state.activeItem, [name]: value};
+    this.setState({ activeItem, [name]: value},
+      () => { this.validateField(name, value) });
   };
+
+  validateField(fieldName, value) {
+    let fieldValidationErrors = this.state.formErrors;
+    let nomeValid = this.state.activeItem.nome;
+    let cpfValid = this.state.activeItem.cpf;
+
+    switch(fieldName) {
+      case 'nome':
+        nomeValid = value.length >= 10;
+        fieldValidationErrors.nome = nomeValid ? '': ' é muito curto';
+        break;
+      case 'cpf':
+        cpfValid = value.length >= 10;
+        fieldValidationErrors.cpf = cpfValid ? '': ' inválido';
+        break;
+      default:
+        break;
+    }
+    this.setState({formErrors: fieldValidationErrors,
+                    nomeValid: nomeValid,
+                    cpfValid: cpfValid
+                  }, this.validateForm);
+  }
+
+  validateForm() {
+    this.setState({formValid: this.state.nomeValid && this.state.cpfValid});
+  }
 
   render() {
 
@@ -143,6 +173,9 @@ export default class VendedoresTable extends React.Component {
       >
       <DialogTitle id="form-dialog-title">Vendedor</DialogTitle>
       <DialogContent>
+      <div className="panel panel-default">
+        <FormErrors formErrors={this.state.formErrors} />
+      </div>
         <TextField
             autoFocus
             required
@@ -170,7 +203,7 @@ export default class VendedoresTable extends React.Component {
             <Button onClick={this.handleClose} color="primary">
               Cancelar
             </Button>
-            <Button onClick={() => this.saveItem(this.state.activeItem)} color="primary">
+            <Button disabled={!this.state.formValid} onClick={() => this.saveItem(this.state.activeItem)} color="primary">
               Salvar
             </Button>
           </DialogActions>

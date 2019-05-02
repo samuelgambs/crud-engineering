@@ -18,6 +18,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import PersonAdd from '@material-ui/icons/PersonAdd';
+import FormErrors from './components/FormErrors'
 
 
 export default class ClientesTable extends React.Component {
@@ -32,6 +33,8 @@ export default class ClientesTable extends React.Component {
         sexo: "",
         vendedor: ""
       },
+      formErrors: {nome: '',cpf:'', vendedor:''},
+      formValid:false
     }
   }
 
@@ -123,8 +126,45 @@ export default class ClientesTable extends React.Component {
   handleChange = e => {
     let { name, value } = e.target;
     const activeItem = { ...this.state.activeItem, [name]: value };
-    this.setState({ activeItem });
-  };
+
+    this.setState({ activeItem, [name]: value},
+      () => { this.validateField(name, value) });
+    };
+
+
+  validateField(fieldName, value) {
+    let fieldValidationErrors = this.state.formErrors;
+    let nomeValid = this.state.activeItem.nome;
+    let cpfValid = this.state.activeItem.cpf;
+    let vendedorValid = this.state.activeItem.vendedor;
+
+
+    switch(fieldName) {
+      case 'nome':
+        nomeValid = value.length >= 10;
+        fieldValidationErrors.nome = nomeValid ? '': ' é muito curto';
+        break;
+      case 'cpf':
+        cpfValid = value.length >= 10;
+        fieldValidationErrors.cpf = cpfValid ? '': ' inválido';
+        break;
+      case 'vendedor':
+        vendedorValid = value.length !== 0;
+        fieldValidationErrors.vendedor = vendedorValid ? '': ' não selecionado';
+        break;
+      default:
+        break;
+    }
+    this.setState({formErrors: fieldValidationErrors,
+                    nomeValid: nomeValid,
+                    cpfValid: cpfValid,
+                    vendedorValid: vendedorValid
+                  }, this.validateForm);
+  }
+
+  validateForm() {
+    this.setState({formValid: this.state.nomeValid && this.state.cpfValid && this.state.vendedorValid});
+  }
 
   render() {
     return (
@@ -185,6 +225,7 @@ export default class ClientesTable extends React.Component {
        >
       <DialogTitle id="form-dialog-title">Cliente</DialogTitle>
       <DialogContent>
+      <FormErrors formErrors={this.state.formErrors} />
         <TextField
           autoFocus
           required
@@ -228,7 +269,7 @@ export default class ClientesTable extends React.Component {
         <Button onClick={this.handleClose} color="primary">
           Cancelar
         </Button>
-        <Button onClick={() => this.saveItem(this.state.activeItem)} color="primary">
+        <Button disabled={!this.state.formValid} onClick={() => this.saveItem(this.state.activeItem)} color="primary">
           Salvar
         </Button>
       </DialogActions>
